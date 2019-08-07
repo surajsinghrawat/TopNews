@@ -6,20 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/heading"
-        android:text="@string/heading"
-        android:textSize="22sp"
-        android:textColor="@color/colorPrimary"
-        android:padding="5dp"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/heading"-->
+        <!--android:text="@string/heading"-->
+        <!--android:textSize="22sp"-->
+        <!--android:textColor="@color/colorPrimary"-->
+        <!--android:padding="5dp"/>-->
+    <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="180dp"-->
+        <!--android:id="@+id/home_image"-->
+        <!--android:padding="2dp"-->
+        <!--android:src="@drawable/web"/>-->
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/itemList"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="2dp">
 
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>

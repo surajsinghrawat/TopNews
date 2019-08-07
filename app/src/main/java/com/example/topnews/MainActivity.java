@@ -1,10 +1,12 @@
 package com.example.topnews;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -21,10 +23,12 @@ public class MainActivity extends AppCompatActivity {
 
    private static final String URL="https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=72daddecba9840dd8e1ab24b7e88df6f";
     RecyclerView recyclerView;
+    ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupActionBar("Top News");
 
 
         recyclerView = findViewById(R.id.itemList);
@@ -52,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue queue= Volley.newRequestQueue(this);
         queue.add(request);
 
+    }
+
+    private void setupActionBar(String title) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(title);
+        }
     }
 
     }

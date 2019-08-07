@@ -1,12 +1,14 @@
 package com.example.topnews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,21 +31,34 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ImageViewHolde
     @Override
     public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater=LayoutInflater.from(context);
-        View view=inflater.inflate(R.layout.list_item,viewGroup,false);
+        View view=inflater.inflate(R.layout.card_list_item,viewGroup,false);
         return new ImageViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ImageViewHolder Holder, int i) {
+    public void onBindViewHolder(@NonNull final ImageViewHolder Holder, final int i) {
 
         Data data1=data;
-        List<Article> First=data1.getArticles();
+        final List<Article> First=data1.getArticles();
        // Log.d("cod",First.toString());
         Holder.title.setText(First.get(i).getTitle());
         Holder.description.setText(First.get(i).getDescription());
         Holder.author.setText(First.get(i).getAuthor());
-        Holder.content.setText(First.get(i).getContent());
+        //Holder.content.setText(First.get(i).getContent());
         Glide.with(Holder.img.getContext()).load(First.get(i).getUrlToImage()).into(Holder.img);
+        Holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                String web=First.get(i).getUrl();
+//                WebView webView=new WebView(context);
+//                webView.loadUrl(First.get(i).getUrl());
+              //  openWebPage(web);
+
+                Intent intent=new Intent(context,WebPage.class);
+                intent.putExtra("webPage",First.get(i).getUrl());
+                context.startActivity(intent);
+            }
+        });
 
 
     }
@@ -59,11 +74,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ImageViewHolde
         TextView title,description,author,content;
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
-            img=itemView.findViewById(R.id.imageView);
-            title=itemView.findViewById(R.id.news_title);
-            description=itemView.findViewById(R.id.news_Description);
-            author=itemView.findViewById(R.id.news_author);
-            content=itemView.findViewById(R.id.news_content);
+            img=itemView.findViewById(R.id.imageView1);
+            title=itemView.findViewById(R.id.n_title);
+            description=itemView.findViewById(R.id.n_description);
+            author=itemView.findViewById(R.id.n_author);
+            //content=itemView.findViewById(R.id.news_content);
         }
     }
 }
