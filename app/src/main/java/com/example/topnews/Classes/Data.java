@@ -1,7 +1,9 @@
 
-package com.example.topnews;
+package com.example.topnews.Classes;
 
 import java.util.List;
+
+import com.example.topnews.Classes.Article;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

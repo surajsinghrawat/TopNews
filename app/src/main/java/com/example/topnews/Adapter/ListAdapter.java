@@ -1,25 +1,26 @@
-package com.example.topnews;
+package com.example.topnews.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.topnews.Activity.WebPage;
+import com.example.topnews.Classes.Article;
+import com.example.topnews.Classes.Data;
+import com.example.topnews.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ImageViewHolder> {
     private Context context;
-    private Data data;
+    public Data data;
 //    public String[] apiResult;
 //    private List<Article> articles;
     public ListAdapter(Context context, Data data) {
@@ -54,7 +55,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ImageViewHolde
 //                webView.loadUrl(First.get(i).getUrl());
               //  openWebPage(web);
 
-                Intent intent=new Intent(context,WebPage.class);
+                Intent intent=new Intent(context, WebPage.class);
                 intent.putExtra("webPage",First.get(i).getUrl());
                 context.startActivity(intent);
             }
@@ -81,4 +82,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ImageViewHolde
             //content=itemView.findViewById(R.id.news_content);
         }
     }
+
+
 }

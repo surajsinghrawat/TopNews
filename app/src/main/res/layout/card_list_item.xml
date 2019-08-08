@@ -39,7 +39,7 @@
                 android:layout_toRightOf="@id/imageView1"
                 android:layout_below="@id/n_title"
                 android:layout_marginLeft="5dp"
-                android:textColor="@color/text"
+                android:textColor="@color/colorPrimary"
                 android:padding="5dp"
                 android:textSize="10sp"/>
             <TextView
@@ -50,7 +50,7 @@
                 android:layout_toRightOf="@id/imageView1"
                 android:layout_below="@id/n_description"
                 android:padding="5dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
                 android:layout_marginLeft="5dp"
                 android:textSize="15sp"/>
 
@@ -63,7 +63,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_toRightOf="@id/imageView1"
                 android:text="@string/author"
-                android:textColor="@color/text"
+                android:textColor="@color/colorPrimary"
                 android:textSize="10sp" />
 
 

@@ -1,5 +1,5 @@
 
-package com.example.topnews;
+package com.example.topnews.Classes;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
