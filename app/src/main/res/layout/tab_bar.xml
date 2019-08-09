@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/colorPrimary">
+
+    <TextView
+        android:id="@+id/business"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="15sp"
+        android:text="@string/business"
+        android:textStyle="bold"
+        android:layout_weight="1"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/politics"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="15sp"
+        android:text="@string/politics"
+        android:textStyle="bold"
+        android:layout_weight="1"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/sports"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="15sp"
+        android:text="@string/sports"
+        android:textStyle="bold"
+        android:layout_weight="1"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/entertainment"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="15sp"
+        android:text="@string/entertainment"
+        android:textStyle="bold"
+        android:layout_weight="1"
+        android:gravity="center"/>
+
+
+
+</LinearLayout>

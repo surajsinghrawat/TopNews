@@ -7,35 +7,19 @@
     tools:context=".Activity.MainActivity"
     android:orientation="vertical">
 
+<include layout="@layout/tab_bar">
 
-        <!--<com.example.sliderviewlibrary.SliderView-->
-            <!--android:id="@+id/sliderView"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="200dp"-->
-            <!--android:padding="5dp"-->
-            <!--android:adjustViewBounds="true"-->
-            <!--android:scaleType="center"-->
-            <!--android:background="@color/text"/>-->
-        <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:padding="5dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/imageItem"-->
-            <!--android:orientation="horizontal"-->
-            <!--&gt;-->
-
-        <!--</android.support.v7.widget.RecyclerView>-->
-
-
-    <android.support.v7.widget.RecyclerView
-        android:paddingTop="5dp"
+</include>
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/itemList"
-        android:orientation="vertical"
-        android:background="#000000"
-        android:padding="2dp">
+        android:layout_height="match_parent"
+        android:id="@+id/view_Pager">
 
-    </android.support.v7.widget.RecyclerView>
+
+
+    </android.support.v4.view.ViewPager>
+
+
+
+
 </LinearLayout>
