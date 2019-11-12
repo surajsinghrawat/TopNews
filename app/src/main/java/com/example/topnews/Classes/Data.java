@@ -1,9 +1,13 @@
 
 package com.example.topnews.Classes;
 
+import android.util.Log;
+
 import java.util.List;
 
 import com.example.topnews.Classes.Article;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -41,6 +45,13 @@ public class Data {
 
     public void setArticles(List<Article> articles) {
         this.articles = articles;
+    }
+
+    public static Data parseResponse(String responseJson){
+        Log.d("DataResponse",responseJson);
+        Gson gson = new GsonBuilder().create();
+        Data response = gson.fromJson(responseJson, Data.class);
+        return response;
     }
 
 }

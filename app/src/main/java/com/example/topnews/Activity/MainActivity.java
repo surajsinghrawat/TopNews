@@ -1,12 +1,19 @@
 package com.example.topnews.Activity;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,22 +41,19 @@ import java.util.TimerTask;
 
 
 public class MainActivity extends AppCompatActivity {
-
-   private static final String URL="https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=72daddecba9840dd8e1ab24b7e88df6f";
-    public Data data;
-    RecyclerView recyclerView;
-    ImageView imageView;
-     SliderView sliderView;
+    NavigationView navigationView;
+    Toolbar toolbar;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+    DrawerLayout drawerLayout;
      TextView entertainment,sports,politics,business;
      ViewPager viewPager;
-     PageViewAdapter pageViewAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupActionBar("Top News");
-       // getData();
-       // ImageSlideView();
+        //setupActionBar("Top News");
+
         business=findViewById(R.id.business);
         sports=findViewById(R.id.sports);
         politics=findViewById(R.id.politics);
@@ -57,11 +61,39 @@ public class MainActivity extends AppCompatActivity {
         viewPager=findViewById(R.id.view_Pager);
         PageViewAdapter pageViewAdapter=new PageViewAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pageViewAdapter);
-        //Tabs
+
         pageclik();
-        //pageChangeEvent
+
         pageChamgeEvent();
 
+        setupToolbar();
+
+
+        navigationView=findViewById(R.id.navigation_menu);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.shareApp:
+                        Intent intent=new Intent(Intent.ACTION_SEND);
+
+                        final String aapPackagName=getApplicationContext().getPackageName();
+                        String strAppLink="";
+                        try{
+                            strAppLink="http://play.googal.com/store/app/details?id="+aapPackagName;
+                        }catch (android.content.ActivityNotFoundException anfe){
+                            strAppLink="http://play.googal.com/store/app/details?id="+aapPackagName;
+                        }
+                        intent.setType("text/link");
+                        String shareBody="Hey! Download The AmaZing App"+"\n"+""+strAppLink;
+                        String shareSub="App NAME/TITLE";
+                        intent.putExtra(Intent.EXTRA_SUBJECT,shareSub);
+                        intent.putExtra(Intent.EXTRA_TEXT,shareBody);
+                        startActivity(Intent.createChooser(intent,"Share Using"));
+                }
+                return false;
+            }
+        });
 
     }
 
@@ -225,5 +257,15 @@ public class MainActivity extends AppCompatActivity {
 //        Timer timer = new Timer();
 //        timer.schedule(task,25,4000);
 //    }
+
+
+    private void setupToolbar(){
+        drawerLayout=findViewById(R.id.drawer);
+        toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        actionBarDrawerToggle=new ActionBarDrawerToggle(this,drawerLayout,toolbar, R.string.app_name,R.string.app_name);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+    }
     }
 

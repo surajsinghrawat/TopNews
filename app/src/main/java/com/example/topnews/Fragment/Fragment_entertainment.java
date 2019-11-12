@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -20,10 +21,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.topnews.Adapter.ListAdapter;
 import com.example.topnews.Classes.Data;
+import com.example.topnews.Classes.RequestClass;
 import com.example.topnews.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONObject;
+
+import java.util.Objects;
 import java.util.zip.Inflater;
 
 public class Fragment_entertainment extends Fragment {
@@ -39,23 +44,21 @@ public class Fragment_entertainment extends Fragment {
         recyclerView = layout.findViewById(R.id.itemList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        StringRequest request = new StringRequest(URL, new Response.Listener<String>() {
+        RequestClass request=new RequestClass(Request.Method.GET, RequestClass.ENTERTENMENT,
+                new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
-                Log.d("code", response);
-                GsonBuilder gsonBuilder = new GsonBuilder();
-                Gson gson = gsonBuilder.create();
-                Data data = gson.fromJson(response, Data.class);
-                recyclerView.setAdapter(new ListAdapter(getActivity(), data));
+            public void onResponse(JSONObject response) {
+                Data data = Data.parseResponse(response.toString());
+                recyclerView.setAdapter(new ListAdapter(getActivity(),data));
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
-        });
+        },getActivity());
 
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
         queue.add(request);
 
         return layout;
