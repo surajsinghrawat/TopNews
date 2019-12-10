@@ -90,6 +90,24 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra(Intent.EXTRA_SUBJECT,shareSub);
                         intent.putExtra(Intent.EXTRA_TEXT,shareBody);
                         startActivity(Intent.createChooser(intent,"Share Using"));
+                        break;
+                    case R.id.news_business:
+                        viewPager.setCurrentItem(0);
+                        break;
+                    case R.id.news_politics:
+                        viewPager.setCurrentItem(1);
+                        break;
+                    case R.id.news_sport:
+                        viewPager.setCurrentItem(2);
+                        break;
+                    case R.id.news_entertainment:
+                        viewPager.setCurrentItem(3);
+                        break;
+                    case R.id.location:
+                        Intent intentloc=new Intent(MainActivity.this,LocationActivity.class);
+                        startActivity(intentloc);
+                        break;
+
                 }
                 return false;
             }

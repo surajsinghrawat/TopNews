@@ -1,42 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:id="@+id/main_menu"
+    <group
+        android:id="@+id/main_menu"
         android:checkableBehavior="none">
-        <item android:id="@+id/menuqu"
-            android:title="Home">
+        <item
+            android:id="@+id/menuqu"
+            android:title="Home"></item>
+
+        <item
+            android:id="@+id/category"
+            android:title="News Category">
+            <menu>
+                <group
+                    android:id="@+id/categoryqu"
+                    android:checkableBehavior="none">
+
+                    <item
+                        android:id="@+id/news_business"
+                        android:title="Business" />
+
+                    <item
+                        android:id="@+id/news_politics"
+                        android:title="Politics" />
+                    <item
+                        android:id="@+id/news_sport"
+                        android:title="Sports" />
+                    <item
+                        android:id="@+id/news_entertainment"
+                        android:title="Entertainment" />
+                </group>
+            </menu>
         </item>
 
-<!--        <item android:id="@+id/category"-->
-<!--            android:title="News Category">-->
-<!--            <menu>-->
-<!--                <group android:id="@+id/categoryqu"-->
-<!--                    android:checkableBehavior="none">-->
-<!--                    <item android:id="@+id/news_business"-->
-<!--                        android:title="Business"/>-->
-
-<!--                    <item android:id="@+id/news_politics"-->
-<!--                        android:title="Politics"/>-->
-<!--                    <item android:id="@+id/news_sport"-->
-<!--                        android:title="Sports"/>-->
-<!--                    <item android:id="@+id/news_entertainment"-->
-<!--                        android:title="Entertainment"/>-->
-<!--                </group>-->
-<!--            </menu>-->
-<!--        </item>-->
-
-        <item android:id="@+id/app_setting"
+        <item
+            android:id="@+id/app_setting"
             android:title="App Setting">
             <menu>
-                <group android:id="@+id/settin_qu"
+                <group
+                    android:id="@+id/settin_qu"
                     android:checkableBehavior="none">
-                    <item android:id="@+id/feedback"
-                        android:title="FeedBack"/>
-                    <item android:id="@+id/aboutus"
-                        android:title="About Us"/>
+                    <item
+                        android:id="@+id/feedback"
+                        android:title="FeedBack" />
+                    <item
+                        android:id="@+id/aboutus"
+                        android:title="About Us" />
 
-                    <item android:id="@+id/shareApp"
-                        android:title="Share App"/>
+                    <item
+                        android:id="@+id/shareApp"
+                        android:title="Share App" />
+
+                    <item
+                        android:id="@+id/location"
+                        android:title="Device Location" />
 
                 </group>
             </menu>

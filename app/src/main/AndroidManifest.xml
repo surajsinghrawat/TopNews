@@ -3,6 +3,8 @@
     package="com.example.topnews">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -11,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activity.LocationActivity"></activity>
         <activity android:name=".Activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,8 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.WebPage" />
-        <activity android:name=".Activity.MainActivity">
-        </activity>
+        <activity android:name=".Activity.MainActivity"></activity>
     </application>
 
 </manifest>

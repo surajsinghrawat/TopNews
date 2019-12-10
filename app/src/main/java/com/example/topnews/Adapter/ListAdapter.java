@@ -80,6 +80,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ImageViewHolde
             description=itemView.findViewById(R.id.n_description);
             author=itemView.findViewById(R.id.n_author);
             //content=itemView.findViewById(R.id.news_content);
+
         }
     }
 
