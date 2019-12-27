@@ -7,4 +7,6 @@
     <string name="business">Business</string>
     <string name="sports">Sports</string>
     <string name="politics">Politics</string>
+    <string name="firebase_path">TopNews_location</string>
+    <string name="tracking_enabled_notif">Tracking is currently enabled. Tap to cancel.</string>
 </resources>

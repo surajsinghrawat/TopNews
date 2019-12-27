@@ -1,8 +1,21 @@
 package com.example.topnews.Activity;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -12,6 +25,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +44,9 @@ import com.example.topnews.Adapter.PageViewAdapter;
 import com.example.topnews.Classes.Article;
 import com.example.topnews.Classes.Data;
 import com.example.topnews.Adapter.ListAdapter;
+import com.example.topnews.GPSUpdateService;
 import com.example.topnews.R;
+import com.example.topnews.TreckingService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -45,8 +61,10 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawerLayout;
-     TextView entertainment,sports,politics,business;
-     ViewPager viewPager;
+    TextView entertainment, sports, politics, business;
+    ViewPager viewPager;
+
+    private static final int PERMISSIONS_REQUEST = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +72,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //setupActionBar("Top News");
 
-        business=findViewById(R.id.business);
-        sports=findViewById(R.id.sports);
-        politics=findViewById(R.id.politics);
-        entertainment=findViewById(R.id.entertainment);
-        viewPager=findViewById(R.id.view_Pager);
-        PageViewAdapter pageViewAdapter=new PageViewAdapter(getSupportFragmentManager());
+
+        business = findViewById(R.id.business);
+        sports = findViewById(R.id.sports);
+        politics = findViewById(R.id.politics);
+        entertainment = findViewById(R.id.entertainment);
+        viewPager = findViewById(R.id.view_Pager);
+        PageViewAdapter pageViewAdapter = new PageViewAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pageViewAdapter);
 
         pageclik();
@@ -67,29 +86,52 @@ public class MainActivity extends AppCompatActivity {
         pageChamgeEvent();
 
         setupToolbar();
+        checkGPSProvider();
 
 
-        navigationView=findViewById(R.id.navigation_menu);
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Log.d("GPSON","GPS IS ON");
+           // finish();
+        }
+        int permission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION+Manifest.permission.READ_PHONE_STATE+Manifest.permission.ACCESS_COARSE_LOCATION);
+
+//If the location permission has been granted, then start the TrackerService//
+
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            startTrackerService();
+        } else {
+
+//If the app doesn’t currently have access to the user’s location, then request access//
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSIONS_REQUEST);
+        }
+
+
+        navigationView = findViewById(R.id.navigation_menu);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.shareApp:
-                        Intent intent=new Intent(Intent.ACTION_SEND);
+                        Intent intent = new Intent(Intent.ACTION_SEND);
 
-                        final String aapPackagName=getApplicationContext().getPackageName();
-                        String strAppLink="";
-                        try{
-                            strAppLink="http://play.googal.com/store/app/details?id="+aapPackagName;
-                        }catch (android.content.ActivityNotFoundException anfe){
-                            strAppLink="http://play.googal.com/store/app/details?id="+aapPackagName;
+                        final String aapPackagName = getApplicationContext().getPackageName();
+                        String strAppLink = "";
+                        try {
+                            strAppLink = "http://play.googal.com/store/app/details?id=" + aapPackagName;
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            strAppLink = "http://play.googal.com/store/app/details?id=" + aapPackagName;
                         }
                         intent.setType("text/link");
-                        String shareBody="Hey! Download The AmaZing App"+"\n"+""+strAppLink;
-                        String shareSub="App NAME/TITLE";
-                        intent.putExtra(Intent.EXTRA_SUBJECT,shareSub);
-                        intent.putExtra(Intent.EXTRA_TEXT,shareBody);
-                        startActivity(Intent.createChooser(intent,"Share Using"));
+                        String shareBody = "Hey! Download The AmaZing App" + "\n" + "" + strAppLink;
+                        String shareSub = "App NAME/TITLE";
+                        intent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
+                        intent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                        startActivity(Intent.createChooser(intent, "Share Using"));
                         break;
                     case R.id.news_business:
                         viewPager.setCurrentItem(0);
@@ -104,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                         viewPager.setCurrentItem(3);
                         break;
                     case R.id.location:
-                        Intent intentloc=new Intent(MainActivity.this,LocationActivity.class);
+                        Intent intentloc = new Intent(MainActivity.this, LocationActivity.class);
                         startActivity(intentloc);
                         break;
 
@@ -113,9 +155,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+
+
     }
 
-    private void pageChamgeEvent(){
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        //If the permission has been granted...//
+
+        if (requestCode == PERMISSIONS_REQUEST && grantResults.length == 3
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+//...then start the GPS tracking service//
+
+            startTrackerService();
+
+        } else {
+
+//If the user denies the permission request, then display a toast with some more information//
+
+            Toast.makeText(this, "Please enable location services to allow GPS tracking", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void startTrackerService() {
+        startService(new Intent(this, TreckingService.class));
+        startGPSUpdates();
+       //startService(new Intent(this, GPSUpdateService.class));
+
+//Notify the user that tracking has been enabled//
+
+        Toast.makeText(this, "GPS tracking enabled", Toast.LENGTH_SHORT).show();
+
+//Close MainActivity//
+
+        // finish();
+    }
+
+
+    private void pageChamgeEvent() {
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -136,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onTabChange(int i) {
-        if (i==0) {
+        if (i == 0) {
             business.setTextSize(20);
             business.setTextColor(getResources().getColor(R.color.white));
 
@@ -150,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        if (i==1) {
+        if (i == 1) {
             politics.setTextSize(20);
             politics.setTextColor(getResources().getColor(R.color.white));
 
@@ -163,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
             sports.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         }
 
-        if (i==2) {
+        if (i == 2) {
             sports.setTextSize(20);
             sports.setTextColor(getResources().getColor(R.color.white));
 
@@ -176,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
             politics.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         }
 
-        if (i==3) {
+        if (i == 3) {
             entertainment.setTextSize(20);
             entertainment.setTextColor(getResources().getColor(R.color.white));
 
@@ -191,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void pageclik(){
+    private void pageclik() {
 
         business.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,7 +301,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
 //    private void getData()
@@ -277,13 +356,64 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
 
-    private void setupToolbar(){
-        drawerLayout=findViewById(R.id.drawer);
-        toolbar=findViewById(R.id.toolbar);
+    private void setupToolbar() {
+        drawerLayout = findViewById(R.id.drawer);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        actionBarDrawerToggle=new ActionBarDrawerToggle(this,drawerLayout,toolbar, R.string.app_name,R.string.app_name);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
     }
+
+    public void checkGPSProvider() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager == null) {
+            Toast.makeText(this, "Location not available.", Toast.LENGTH_SHORT).show();
+        } else if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("GPS is turned off. This app requires you to turn on the GPS to work.");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Turn On GPS", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                    dialogInterface.dismiss();
+                }
+            });
+
+            builder.create().show();
+        }
     }
+
+//    public String getDeviceId(Context c) {
+//        TelephonyManager telephonyManager = (TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE);
+//        String device_id = telephonyManager.getDeviceId();
+//
+//        if (device_id == null || device_id.isEmpty()) {
+//            //no telephony manager
+//            String androidId = Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ANDROID_ID);
+//            device_id = androidId;
+//        }
+//
+//        return device_id;
+//    }
+
+    public void startGPSUpdates() {
+
+        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, GPSUpdateService.class);
+        PendingIntent alarmIntent = PendingIntent.getService(this, 0, intent, 0);
+
+        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() +
+                        60 * 1000,
+                120000, alarmIntent);
+
+        /* Change it to Half an hour for normal app again */
+
+        Log.d("GPSUPDATESSTART", "GPS Updater for every 5 min");
+    }
+
+}
 
