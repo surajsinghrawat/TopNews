@@ -58,14 +58,14 @@ public class TreckingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        String path = getString(R.string.firebase_path);
-//
+//          String path = getString(R.string.firebase_path);
+////
 //        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 //        deviceId = telephonyManager.getDeviceId();
 //        Log.d("Device", "Device:-" + deviceId);
-//
-//        //Get a reference to the database, so your app can perform read and write operations//
-//
+////
+////        //Get a reference to the database, so your app can perform read and write operations//
+////
 //        ref = FirebaseDatabase.getInstance().getReference(path).child(deviceId);
         buildNotification();
        // requestLocationUpdates();
@@ -73,19 +73,6 @@ public class TreckingService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-//
-//    @Override
-//    public void onCreate() {
-//        super.onCreate();
-//        String path = getString(R.string.firebase_path);
-//
-//        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-//        deviceId = telephonyManager.getDeviceId();
-//        Log.d("Device", "Device:-" + deviceId);
-//        ref = FirebaseDatabase.getInstance().getReference(path).child(deviceId);
-//        buildNotification();
-//        requestLocationUpdates();
-//    }
 
     private void buildNotification() {
         Log.d(TAG, "Start Foreground Service");

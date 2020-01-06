@@ -44,6 +44,7 @@ import com.example.topnews.Adapter.PageViewAdapter;
 import com.example.topnews.Classes.Article;
 import com.example.topnews.Classes.Data;
 import com.example.topnews.Adapter.ListAdapter;
+import com.example.topnews.ExampleJobIntentService;
 import com.example.topnews.GPSUpdateService;
 import com.example.topnews.R;
 import com.example.topnews.TreckingService;
@@ -182,7 +183,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void startTrackerService() {
         startService(new Intent(this, TreckingService.class));
-        startGPSUpdates();
+        Intent serviceIntent=new Intent(this, ExampleJobIntentService.class);
+       // ExampleJobIntentService.enqueueWork(this,ExampleJobIntentService.class,1234,serviceIntent);
+        ExampleJobIntentService.enqueueWork(this,serviceIntent);
+        //startGPSUpdates();
        //startService(new Intent(this, GPSUpdateService.class));
 
 //Notify the user that tracking has been enabled//
@@ -408,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
         alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() +
                         60 * 1000,
-                120000, alarmIntent);
+                300000, alarmIntent);
 
         /* Change it to Half an hour for normal app again */
 
