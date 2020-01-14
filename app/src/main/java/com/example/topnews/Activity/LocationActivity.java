@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -107,6 +108,7 @@ public class LocationActivity extends AppCompatActivity implements GoogleApiClie
         if (!checkPlayServices()) {
             locationLat.setText("You need to install Google Play Services to use the App properly");
             locationLong.setText("You need to install Google Play Services to use the App properly");
+            Log.d("massage",""+locationLat);
         }
     }
 

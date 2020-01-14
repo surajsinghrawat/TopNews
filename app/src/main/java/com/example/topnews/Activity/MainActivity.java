@@ -1,7 +1,6 @@
 package com.example.topnews.Activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -22,39 +21,20 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.sliderviewlibrary.SliderView;
 import com.example.topnews.Adapter.PageViewAdapter;
-import com.example.topnews.Classes.Article;
-import com.example.topnews.Classes.Data;
-import com.example.topnews.Adapter.ListAdapter;
 import com.example.topnews.ExampleJobIntentService;
 import com.example.topnews.GPSUpdateService;
 import com.example.topnews.R;
 import com.example.topnews.TreckingService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -71,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //setupActionBar("Top News");
-
-
         business = findViewById(R.id.business);
         sports = findViewById(R.id.sports);
         politics = findViewById(R.id.politics);
@@ -93,18 +70,18 @@ public class MainActivity extends AppCompatActivity {
         LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Log.d("GPSON","GPS IS ON");
-           // finish();
+
         }
         int permission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION+Manifest.permission.READ_PHONE_STATE+Manifest.permission.ACCESS_COARSE_LOCATION);
 
-//If the location permission has been granted, then start the TrackerService//
+            //If the location permission has been granted, then start the TrackerService//
 
         if (permission == PackageManager.PERMISSION_GRANTED) {
             startTrackerService();
         } else {
 
-//If the app doesn’t currently have access to the user’s location, then request access//
+            //If the app doesn’t currently have access to the user’s location, then request access//
 
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -164,38 +141,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        //If the permission has been granted...//
+            //If the permission has been granted...//
 
         if (requestCode == PERMISSIONS_REQUEST && grantResults.length == 3
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-//...then start the GPS tracking service//
+            //...then start the GPS tracking service//
 
             startTrackerService();
 
         } else {
 
-//If the user denies the permission request, then display a toast with some more information//
+            //If the user denies the permission request, then display a toast with some more information//
 
             Toast.makeText(this, "Please enable location services to allow GPS tracking", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void startTrackerService() {
-        startService(new Intent(this, TreckingService.class));
-        Intent serviceIntent=new Intent(this, ExampleJobIntentService.class);
-       // ExampleJobIntentService.enqueueWork(this,ExampleJobIntentService.class,1234,serviceIntent);
-        ExampleJobIntentService.enqueueWork(this,serviceIntent);
-        //startGPSUpdates();
-       //startService(new Intent(this, GPSUpdateService.class));
 
-//Notify the user that tracking has been enabled//
+        startService(new Intent(this, TreckingService.class));
+
+        Intent serviceIntent=new Intent(this, ExampleJobIntentService.class);
+        ExampleJobIntentService.enqueueWork(this,serviceIntent);
+
+        //Notify the user that tracking has been enabled//
 
         Toast.makeText(this, "GPS tracking enabled", Toast.LENGTH_SHORT).show();
 
-//Close MainActivity//
-
-        // finish();
     }
 
 
@@ -413,8 +386,6 @@ public class MainActivity extends AppCompatActivity {
                 SystemClock.elapsedRealtime() +
                         60 * 1000,
                 300000, alarmIntent);
-
-        /* Change it to Half an hour for normal app again */
 
         Log.d("GPSUPDATESSTART", "GPS Updater for every 5 min");
     }
